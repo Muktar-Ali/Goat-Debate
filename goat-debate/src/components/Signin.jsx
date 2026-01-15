@@ -7,11 +7,11 @@ import {
 import { doSignInWithEmailAndPassword, doSignInWithGoogle } from "../firebase/auth";
 import { useAuth } from "../contexts/authContext";
 
-export default function Signup() {
+export default function Signin() {
   return (
     <div className="min-h-screen bg-slate-950 text-white overflow-hidden">
       <h1 className="text-4xl font-bold text-center pt-20">
-        Sign Up for GOAT Debate
+        Sign In to GOAT Debate
       </h1>
       <span className="block text-center text-gray-400">
         Join to cast your vote!

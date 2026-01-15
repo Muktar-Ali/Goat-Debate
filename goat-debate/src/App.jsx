@@ -1,6 +1,6 @@
 import Navbar from "./components/Navbar.jsx";
 import Player from "./components/Player.jsx";
-import Signup from "./components/Signup.jsx";
+import Signup from "./components/Signin.jsx";
 import {
   BrowserRouter as Router,
   Routes,
