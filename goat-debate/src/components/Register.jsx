@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { doSignInWithEmailAndPassword } from '../firebase/auth';
+import { doCreateUserWithEmailAndPassword } from '../firebase/auth';
 import { useAuth } from '../contexts/authContext';
 
-export default function Signin() {
+export default function Register() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -18,21 +19,25 @@ export default function Signin() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (password !== confirmPassword) {
+            setError('Passwords do not match');
+            return;
+        }
         setError('');
         setLoading(true);
         try {
-            await doSignInWithEmailAndPassword(email, password);
+            await doCreateUserWithEmailAndPassword(email, password);
             navigate('/');
-        } catch {
-            setError('Invalid email or password');
+        } catch (err) {
+            setError(err.message);
         }
         setLoading(false);
     };
 
     return (
         <div className="min-h-screen bg-slate-950 text-white overflow-hidden">
-            <h1 className="text-4xl font-bold text-center pt-20">Sign In to GOAT Debate</h1>
-            <span className="block text-center text-gray-400">Welcome back!</span>
+            <h1 className="text-4xl font-bold text-center pt-20">Sign Up to GOAT Debate</h1>
+            <span className="block text-center text-gray-400">Join to cast your vote!</span>
             <div className="flex justify-center mt-12">
                 <form onSubmit={handleSubmit} className="bg-slate-900/70 backdrop-blur-md p-8 rounded-lg w-full max-w-md space-y-6">
                     {error && <p className="text-red-400 text-sm">{error}</p>}
@@ -54,15 +59,24 @@ export default function Signin() {
                             placeholder="Enter your password"
                         />
                     </div>
+                    <div>
+                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300">Confirm Password</label>
+                        <input
+                            type="password" id="confirmPassword" required
+                            value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}
+                            className="mt-1 block w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Confirm your password"
+                        />
+                    </div>
                     <button
                         type="submit" disabled={loading}
                         className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-md text-white font-semibold transition-colors duration-300"
                     >
-                        {loading ? 'Signing In...' : 'Sign In'}
+                        {loading ? 'Creating Account...' : 'Sign Up'}
                     </button>
                     <p className="text-center text-gray-400 text-sm">
-                        Don't have an account?{' '}
-                        <Link to="/register" className="text-blue-400 hover:underline">Sign Up</Link>
+                        Already have an account?{' '}
+                        <Link to="/signin" className="text-blue-400 hover:underline">Sign In</Link>
                     </p>
                 </form>
             </div>
